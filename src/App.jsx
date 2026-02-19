@@ -1,4 +1,4 @@
-import {useState,useEffect} from "react";
+import {useState} from "react";
 
 const PDF_BASE="https://raw.githubusercontent.com/Yorian-melki/L1-droit-pdfs/main/";
 const HF_TOKEN=["hf_widu","QytMDwPnbSNJq","plSzgJiiPdXNfEXgd"].join("");
@@ -110,7 +110,7 @@ export default function App(){
         {view==="pdf"&&selectedPdf&&(
           <div>
             <button onClick={()=>setView("pdfs")} style={{padding:"8px 16px",background:s.card,border:"none",color:s.text,borderRadius:6,cursor:"pointer",marginBottom:15}}>← Retour</button>
-            <iframe src={selectedPdf} style={{width:"100%",height:"80vh",border:"none",borderRadius:12,background:"white"}}/>
+            <iframe src={selectedPdf} title="PDF Viewer" style={{width:"100%",height:"80vh",border:"none",borderRadius:12,background:"white"}}/>
           </div>
         )}
 
