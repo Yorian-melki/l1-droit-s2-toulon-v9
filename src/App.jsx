@@ -271,13 +271,13 @@ async function aiOllama(sys, msg, url = "http://localhost:11434", model = "llama
 
 function aiMock(sys, msg) {
   if (msg.toLowerCase().includes("copie") || msg.toLowerCase().includes("corrige")) {
-    return `🎓 CORRECTION (Mode offline)\\n\\nNOTE: 12/20\\n\\n✅ POINTS FORTS:\\n- Structure correcte\\n- Raisonnement visible\\n\\n⚠️ À AMÉLIORER:\\n1. Problématique imprécise\\n2. Manque références juridiques\\n3. Syllogisme incomplet\\n\\n💡 RECOMMANDATIONS:\\n- Revoir méthodologie\\n- Citer sources (articles, JP)\\n- Structurer: Majeure → Mineure → Conclusion\\n\\n⚡ Connectez HuggingFace (token configuré) pour correction détaillée.`;
+    return "🎓 CORRECTION (Mode offline)\n\nNOTE: 12/20\n\n✅ POINTS FORTS:\n- Structure correcte\n- Raisonnement visible\n\n⚠️ À AMÉLIORER:\n1. Problématique imprécise\n2. Manque références juridiques\n3. Syllogisme incomplet\n\n💡 RECOMMANDATIONS:\n- Revoir méthodologie\n- Citer sources (articles, JP)\n- Structurer: Majeure → Mineure → Conclusion\n\n⚡ Connectez HuggingFace (token configuré) pour correction détaillée.";
   }
   if (msg.toLowerCase().includes("génère") && msg.toLowerCase().includes("sujet")) {
     const sujets = ["Le Conseil constitutionnel et droits fondamentaux","La QPC : évolution et enjeux","Séparation des pouvoirs Ve République","Formation du mariage civil","Effets patrimoniaux du divorce"];
     return sujets[Math.floor(Math.random() * sujets.length)];
   }
-  return `⚡ Mode offline\\n\\nPour IA complète:\\n1. HuggingFace: Token configuré ✅\\n2. Ollama: \\`brew install ollama && ollama run llama3.2\\``;
+  return "⚡ Mode offline\n\nPour IA complète:\n1. HuggingFace: Token configuré ✅\n2. Ollama: `brew install ollama && ollama run llama3.2`";
 }
 
 // 🧠 FONCTION IA PRINCIPALE — TOUJOURS RÉUSSIT
