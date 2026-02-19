@@ -422,14 +422,14 @@ RÈGLES: Sois rigoureux. Vocabulaire juridique précis. Cite articles, arrêts, 
     if(ed){const diff=(new Date(ed)-now)/864e5;prox=diff<=0?1:diff>60?.2:1-(diff/60)*.8;}
     const score=ects*prox*(1-m/4)*(t.v?1.2:.8);
     return{...t,score,mast:m};
-  }).sort((a,b)=>b.score-a.score),[S.mastery,S.examDates,mst]);
+  }).sort((a,b)=>b.score-a.score),[S.mastery,S.examDates]);
 
   const stats=useMemo(()=>{
     const n=T.length,v=T.filter(t=>t.v).length,m3=T.filter(t=>mst(t.id)>=3).length;
     const m0=T.filter(t=>mst(t.id)===0).length;
     const avg=T.reduce((s,t)=>s+mst(t.id),0)/n;
     return{n,v,m3,m0,avg,studying:n-m3-m0};
-  },[S.mastery,mst]);
+  },[S.mastery]);
 
   // ── PDF VIEWER ────────────────────────────────────────────────
   const openPdf=(filename)=>{
@@ -462,9 +462,7 @@ RÈGLES: Sois rigoureux. Vocabulaire juridique précis. Cite articles, arrêts, 
   const resetAll=()=>{if(!window.confirm("⚠️ SUPPRIMER toutes les données ?"))return;if(!window.confirm("DERNIÈRE CONFIRMATION: Tout sera perdu."))return;localStorage.removeItem(SK);try{window.storage.delete(SK);}catch{}setS(defState());setView("dash");setSel(null);setSel2(null);};
 
   // ── STYLES ────────────────────────────────────────────────────
-// ──── PALETTE DYNAMIQUE (Dark Mode Support) ──────────────────────
-const COLORS_LIGHT={bg:"#F2F6F3",surface:"#DCE8E1",primary:"#2F5D50",textMain:"#18221E",textSecondary:"#4E5C57",border:"#BFD6CB",danger:"#9F4E4E",success:"#2F7D5C"};
-  // Color system (using hardcoded dark theme)
+  // Color system (using dark theme)
   const bg="#070710",bg1="#0c0c18",bg2="#12122a",bg3="#1a1a36",tx="#ddddf0",tx2="#8888a8",tx3="#5a5a78",bdr="#222244",acc="#7c6cfc";
   const font="system-ui,-apple-system,'Segoe UI',sans-serif";
   const card={background:bg2,border:`1px solid ${bdr}`,borderRadius:8,padding:14,marginBottom:10};
