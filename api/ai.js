@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   const HF_TOKEN = process.env.REACT_APP_HF_TOKEN || ["hf_widu","QytMDwPnbSNJq","plSzgJiiPdXNfEXgd"].join("");
 
   try {
-    const response = await fetch('https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3', {
+    const response = await fetch('https://api-inference.huggingface.co/models/mistralai/Mixtral-8x7B-Instruct-v0.1', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${HF_TOKEN}`,
