@@ -306,12 +306,6 @@ async function callAIInfaillible(sys, msg, provider, settings) {
   return aiMock(sys, msg);
 }
 
-  const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1500,system:sys,messages:[{role:"user",content:msg}]})});
-  const d=await r.json();
-  return d.content?.map(b=>b.text||"").join("\n")||d.error?.message||"Erreur Anthropic";
-}
 async function aiHF(sys, msg, token, model){
   const r=await fetch(`https://api-inference.huggingface.co/models/${model||"mistralai/Mistral-7B-Instruct-v0.3"}`,{
     method:"POST",headers:{"Authorization":`Bearer ${token}`,"Content-Type":"application/json"},
