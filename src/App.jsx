@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState,useEffect} from "react";
 
 const PDF_BASE="https://raw.githubusercontent.com/Yorian-melki/L1-droit-pdfs/main/";
 const HF_TOKEN=["hf_widu","QytMDwPnbSNJq","plSzgJiiPdXNfEXgd"].join("");
@@ -93,13 +93,13 @@ const PDFS=[
 
 async function askAI(question){
   try{
-    const r=await fetch("https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3",{
+    const r=await fetch("/api/ai",{
       method:"POST",
-      headers:{"Authorization":`Bearer ${HF_TOKEN}`,"Content-Type":"application/json"},
-      body:JSON.stringify({inputs:`<s>[INST] Tu es un assistant juridique spécialisé en droit français. ${question} [/INST]`,parameters:{max_new_tokens:800,temperature:0.7}})
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({question})
     });
     const d=await r.json();
-    return Array.isArray(d)?d[0]?.generated_text?.split("[/INST]").pop()?.trim():"Réponse reçue";
+    return d.answer||"Réponse reçue mais format inattendu";
   }catch(e){
     return "⚠️ Erreur IA: "+e.message+"\n\nVérifie ta connexion internet ou réessaye dans quelques secondes.";
   }
@@ -112,6 +112,41 @@ export default function App(){
   const[aiQ,setAiQ]=useState("");
   const[aiA,setAiA]=useState("");
   const[loading,setLoading]=useState(false);
+  const[pdfs,setPdfs]=useState(PDFS);
+  const[pdfLoading,setPdfLoading]=useState(true);
+
+  useEffect(()=>{
+    async function loadPdfs(){
+      try{
+        const r=await fetch("/api/pdf-list");
+        const data=await r.json();
+        const categorized=data.map(pdf=>{
+          let m="AUTRE";
+          let display=pdf.name;
+          if(pdf.name.includes("DROIT CONSTITUTIONNEL")){
+            m="DC";
+            display=pdf.name.replace(/SEMESTRE2-DROIT CONSTITUTIONNEL.*?-(CM|TD|DOCUMENTS).*?-/,'');
+          }else if(pdf.name.includes("DROIT DE LA FAMILLE")){
+            m="DDF";
+            display=pdf.name.replace(/SEMESTRE2-DROIT DE LA FAMILLE.*?-(CM|TD|DOCUMENTS).*?-/,'');
+          }else if(pdf.name.includes("INSTITUTIONS ADMINISTRATIVES")){
+            m="IA";
+            display=pdf.name.replace(/SEMESTRE2-INSTITUTIONS ADMINISTRATIVES.*?-(CM|TD|DOCUMENTS).*?-/,'');
+          }else if(pdf.name.includes("HISTOIRE DU DROIT")){
+            m="HD";
+            display=pdf.name.replace(/SEMESTRE2-HISTOIRE DU DROIT.*?-(CM|TD|DOCUMENTS).*?-/,'');
+          }
+          return{...pdf,m,display};
+        });
+        setPdfs(categorized);
+        setPdfLoading(false);
+      }catch(e){
+        console.error("Erreur chargement PDFs:",e);
+        setPdfLoading(false);
+      }
+    }
+    loadPdfs();
+  },[]);
 
   const s={
     bg:"#0a0a0a",
@@ -129,10 +164,10 @@ export default function App(){
   const matColors={DC:s.dc,DDF:s.ddf,IA:s.ia,HD:s.hd};
   const matNames={DC:"Droit Constitutionnel",DDF:"Droit de la Famille",IA:"Institutions Admin",HD:"Histoire du Droit"};
 
-  const filteredPdfs=filterMat==="ALL"?PDFS:PDFS.filter(p=>p.m===filterMat);
+  const filteredPdfs=filterMat==="ALL"?pdfs:pdfs.filter(p=>p.m===filterMat);
 
-  const openPdf=(name)=>{
-    setSelectedPdf(PDF_BASE+encodeURIComponent(name));
+  const openPdf=(pdf)=>{
+    setSelectedPdf(pdf.download_url);
     setView("pdf");
   };
 
@@ -145,11 +180,11 @@ export default function App(){
   };
 
   const stats={
-    total:PDFS.length,
-    DC:PDFS.filter(p=>p.m==="DC").length,
-    DDF:PDFS.filter(p=>p.m==="DDF").length,
-    IA:PDFS.filter(p=>p.m==="IA").length,
-    HD:PDFS.filter(p=>p.m==="HD").length
+    total:pdfs.length,
+    DC:pdfs.filter(p=>p.m==="DC").length,
+    DDF:pdfs.filter(p=>p.m==="DDF").length,
+    IA:pdfs.filter(p=>p.m==="IA").length,
+    HD:pdfs.filter(p=>p.m==="HD").length
   };
 
   return(
@@ -223,7 +258,7 @@ export default function App(){
             </div>
 
             {filteredPdfs.map((pdf,i)=>(
-              <div key={i} onClick={()=>openPdf(pdf.name)} style={{background:s.card,padding:15,marginBottom:10,borderRadius:8,border:`1px solid ${s.border}`,cursor:"pointer",transition:"all 0.2s"}} onMouseEnter={e=>{e.currentTarget.style.borderColor=matColors[pdf.m];e.currentTarget.style.transform="translateX(4px)";}} onMouseLeave={e=>{e.currentTarget.style.borderColor=s.border;e.currentTarget.style.transform="translateX(0)";}}>
+              <div key={i} onClick={()=>openPdf(pdf)} style={{background:s.card,padding:15,marginBottom:10,borderRadius:8,border:`1px solid ${s.border}`,cursor:"pointer",transition:"all 0.2s"}} onMouseEnter={e=>{e.currentTarget.style.borderColor=matColors[pdf.m];e.currentTarget.style.transform="translateX(4px)";}} onMouseLeave={e=>{e.currentTarget.style.borderColor=s.border;e.currentTarget.style.transform="translateX(0)";}}>
                 <div style={{display:"flex",alignItems:"center",gap:12}}>
                   <div style={{width:40,height:40,background:matColors[pdf.m]+"20",borderRadius:8,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20}}>📄</div>
                   <div style={{flex:1}}>
