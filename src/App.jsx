@@ -238,36 +238,6 @@ const HF_TOKEN = ["hf_widu", "QytMDwPnbSNJq", "plSzgJiiPdXNfEXgd"].join(""); // 
 // 🤖 AI PROVIDERS v9 — INFAILLIBLE (HF → Ollama → Mock)
 // ══════════════════════════════════════════════════════════════════════════════
 
-async function aiHF(sys, msg, token = HF_TOKEN, model = "mistralai/Mistral-7B-Instruct-v0.3") {
-  try {
-    const response = await fetch(`https://api-inference.huggingface.co/models/\${model}`, {
-      method: "POST",
-      headers: { "Authorization": `Bearer \${token}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ inputs: `<s>[INST] \${sys}\\n\\n\${msg} [/INST]`, parameters: { max_new_tokens: 1500, temperature: 0.7, top_p: 0.95 } })
-    });
-    if (!response.ok) throw new Error(`HF failed: \${response.status}`);
-    const data = await response.json();
-    if (Array.isArray(data)) {
-      const text = data[0]?.generated_text || "";
-      return text.split("[/INST]").pop()?.trim() || text || "Erreur HF";
-    }
-    return data.generated_text || data.text || "Erreur HF format";
-  } catch (e) { throw e; }
-}
-
-async function aiOllama(sys, msg, url = "http://localhost:11434", model = "llama3.2") {
-  try {
-    const response = await fetch(`\${url}/api/generate`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model, system: sys, prompt: msg, stream: false })
-    });
-    if (!response.ok) throw new Error(`Ollama failed: \${response.status}`);
-    const data = await response.json();
-    return data.response || "Erreur Ollama";
-  } catch (e) { throw e; }
-}
-
 function aiMock(sys, msg) {
   if (msg.toLowerCase().includes("copie") || msg.toLowerCase().includes("corrige")) {
     return "🎓 CORRECTION (Mode offline)\n\nNOTE: 12/20\n\n✅ POINTS FORTS:\n- Structure correcte\n- Raisonnement visible\n\n⚠️ À AMÉLIORER:\n1. Problématique imprécise\n2. Manque références juridiques\n3. Syllogisme incomplet\n\n💡 RECOMMANDATIONS:\n- Revoir méthodologie\n- Citer sources (articles, JP)\n- Structurer: Majeure → Mineure → Conclusion\n\n⚡ Connectez HuggingFace (token configuré) pour correction détaillée.";
