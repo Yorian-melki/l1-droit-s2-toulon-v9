@@ -1,8 +1,5 @@
 import {useState,useEffect} from "react";
 
-const PDF_BASE="https://raw.githubusercontent.com/Yorian-melki/L1-droit-pdfs/main/";
-const HF_TOKEN=["hf_widu","QytMDwPnbSNJq","plSzgJiiPdXNfEXgd"].join("");
-
 const PDFS=[
   {m:"DC",name:"SEMESTRE2-DROIT CONSTITUTIONNEL DE LA Ve RÉPUBLIQUE-Mr Bardin-CM-Droit Constitutionnel de la V° République. pages.pdf",display:"CM - Droit Constit V° Rép"},
   {m:"DC",name:"SEMESTRE2-DROIT CONSTITUTIONNEL DE LA Ve RÉPUBLIQUE-Mr Bardin-CM-Droit Constitutionnel de la Vème République.pdf",display:"CM - Droit Constit Vème Rép"},
@@ -113,7 +110,6 @@ export default function App(){
   const[aiA,setAiA]=useState("");
   const[loading,setLoading]=useState(false);
   const[pdfs,setPdfs]=useState(PDFS);
-  const[pdfLoading,setPdfLoading]=useState(true);
 
   useEffect(()=>{
     async function loadPdfs(){
@@ -139,10 +135,8 @@ export default function App(){
           return{...pdf,m,display};
         });
         setPdfs(categorized);
-        setPdfLoading(false);
       }catch(e){
         console.error("Erreur chargement PDFs:",e);
-        setPdfLoading(false);
       }
     }
     loadPdfs();
@@ -231,7 +225,7 @@ export default function App(){
               <h3 style={{fontSize:16,marginBottom:10}}>✨ Fonctionnalités</h3>
               <ul style={{lineHeight:2,fontSize:14,paddingLeft:20}}>
                 <li>✅ <strong>85 PDFs</strong> chargés automatiquement depuis GitHub</li>
-                <li>✅ <strong>IA HuggingFace</strong> opérationnelle (Mistral-7B)</li>
+                <li>✅ <strong>IA HuggingFace</strong> opérationnelle (Qwen 2.5)</li>
                 <li>✅ <strong>Filtres par matière</strong> pour navigation rapide</li>
                 <li>✅ <strong>Viewer PDF intégré</strong> - pas besoin de télécharger</li>
                 <li>✅ <strong>Interface moderne</strong> - dark mode inclus</li>
@@ -287,7 +281,7 @@ export default function App(){
         {view==="ai"&&(
           <div style={{background:s.card,padding:30,borderRadius:12,border:`1px solid ${s.border}`}}>
             <h2 style={{marginBottom:15}}>🤖 Assistant IA Juridique</h2>
-            <p style={{marginBottom:20,color:s.textDim,lineHeight:1.6}}>Pose tes questions sur le droit constitutionnel, le droit de la famille, l'histoire du droit ou les institutions administratives. L'IA utilise <strong>Mistral-7B via HuggingFace</strong>.</p>
+            <p style={{marginBottom:20,color:s.textDim,lineHeight:1.6}}>Pose tes questions sur le droit constitutionnel, le droit de la famille, l'histoire du droit ou les institutions administratives. L'IA utilise <strong>Qwen 2.5 via HuggingFace</strong>.</p>
 
             <textarea value={aiQ} onChange={e=>setAiQ(e.target.value)} placeholder="Ex: Explique-moi le principe de séparation des pouvoirs dans la Ve République..." style={{width:"100%",minHeight:140,padding:15,background:"#0a0a0a",color:s.text,border:`1px solid ${s.border}`,borderRadius:8,fontSize:14,fontFamily:"inherit",marginBottom:15,resize:"vertical"}}/>
 
@@ -318,7 +312,7 @@ export default function App(){
         )}
 
         <footer style={{marginTop:40,paddingTop:20,borderTop:`1px solid ${s.border}`,textAlign:"center",fontSize:12,color:s.textDim}}>
-          <p>L1 Droit S2 Toulon v10 · {stats.total} PDFs · IA Mistral-7B · Créé avec ❤️ par Claude</p>
+          <p>L1 Droit S2 Toulon v10 · {stats.total} PDFs · IA Qwen 2.5 · Créé avec ❤️ par Claude</p>
         </footer>
       </div>
     </div>
