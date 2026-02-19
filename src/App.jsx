@@ -422,6 +422,7 @@ RÈGLES: Sois rigoureux. Vocabulaire juridique précis. Cite articles, arrêts, 
     if(ed){const diff=(new Date(ed)-now)/864e5;prox=diff<=0?1:diff>60?.2:1-(diff/60)*.8;}
     const score=ects*prox*(1-m/4)*(t.v?1.2:.8);
     return{...t,score,mast:m};
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }).sort((a,b)=>b.score-a.score),[S.mastery,S.examDates]);
 
   const stats=useMemo(()=>{
@@ -429,6 +430,7 @@ RÈGLES: Sois rigoureux. Vocabulaire juridique précis. Cite articles, arrêts, 
     const m0=T.filter(t=>mst(t.id)===0).length;
     const avg=T.reduce((s,t)=>s+mst(t.id),0)/n;
     return{n,v,m3,m0,avg,studying:n-m3-m0};
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[S.mastery]);
 
   // ── PDF VIEWER ────────────────────────────────────────────────
