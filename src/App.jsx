@@ -459,7 +459,7 @@ RÈGLES: Sois rigoureux. Vocabulaire juridique précis. Cite articles, arrêts, 
   // ── EXPORT/IMPORT/RESET ───────────────────────────────────────
   const exportData=()=>{const b=new Blob([JSON.stringify(S,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=`L1S2_backup_${new Date().toISOString().slice(0,10)}.json`;a.click();};
   const importData=()=>{const inp=document.createElement("input");inp.type="file";inp.accept=".json";inp.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);persist(d.v<V?migrate(d):{...defState(),...d});setView("dash");setSel(null);}catch(err){alert("Erreur: "+err.message);}};r.readAsText(f);};inp.click();};
-  const resetAll=()=>{if(!confirm("⚠️ SUPPRIMER toutes les données ?"))return;if(!confirm("DERNIÈRE CONFIRMATION: Tout sera perdu."))return;localStorage.removeItem(SK);try{window.storage.delete(SK);}catch{}setS(defState());setView("dash");setSel(null);setSel2(null);};
+  const resetAll=()=>{if(!window.confirm("⚠️ SUPPRIMER toutes les données ?"))return;if(!window.confirm("DERNIÈRE CONFIRMATION: Tout sera perdu."))return;localStorage.removeItem(SK);try{window.storage.delete(SK);}catch{}setS(defState());setView("dash");setSel(null);setSel2(null);};
 
   // ── STYLES ────────────────────────────────────────────────────
 // ──── PALETTE DYNAMIQUE (Dark Mode Support) ──────────────────────
