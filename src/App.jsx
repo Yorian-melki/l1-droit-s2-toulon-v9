@@ -229,10 +229,9 @@ function sm2(quality, card){
   return{...card,ef,interval,reps,next};
 }
 
-// ──── AI PROVIDERS ──────────────────────────────────────────────
-async function aiAnthropic(sys, msg){
-
-// ──── TOKENS & CONFIG (v9) ────────────────────────────────────────────────────
+// ──── VERSION & CONFIG (v9) ─────────────────────────────────────
+const V = 9;
+const SK = "l1s2_v9_complete";
 const HF_TOKEN = ["hf_widu", "QytMDwPnbSNJq", "plSzgJiiPdXNfEXgd"].join(""); // ✅ Token hardcodé (obfuscated)
 
 // ══════════════════════════════════════════════════════════════════════════════
